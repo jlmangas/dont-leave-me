@@ -4,6 +4,14 @@ import numpy as np
 import cv2
 import os
 from time import sleep
+from twilio.rest import Client
+
+# --- Twilio setup ---
+# Your Account Sid and Auth Token from twilio.com/console
+account_sid = 'AC76d3438864cb9d1cff0db5e7408f7b0f'
+auth_token = '53560a5bf72bc414dac02c643de9d88c'
+client = Client(account_sid, auth_token)
+
 
 # If you are having trouble with exceptions when calling detectMultiScale
 # you may want to ensure that this path is valid
@@ -39,6 +47,14 @@ while(True):
         sleep(0.1)  # wait for write to complete
         os.system('git commit test.jpg -m \"x\"')
         os.system('git push')
+        sleep(1) # wait some time for push to be good
+        # send a twilio message
+        message = client.messages.create(
+                body='You forgot your Baby in the car fam fam!',
+                from_='+14846962393',
+                media_url='https://raw.githubusercontent.com/jlmangas/dont-leave-me/master/test.jpg',
+                to='+12486655960'
+            )
         break
 
     # Profile detection
